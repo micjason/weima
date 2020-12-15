@@ -11,8 +11,8 @@ module.exports.len = function(arr) {
 <!-- <button bindtap="stopBluetoothDevicesDiscovery">停止扫描</button> -->
 <button bindtap="closeBluetoothAdapter">关闭蓝牙适配器</button>
 <button bindtap="createBLEConnection2">连接特定蓝牙设备</button>
-<button bindtap="writeBLECharacteristicValue2">写入数据</button>
-<button bindtap="useVm">一键连接</button>
+<button bindtap="writeBLECharacteristicValue3">发送明文TBOX四门解锁测试</button>
+<button bindtap="writeBLECharacteristicValue4">寻车测试--加密</button>
 
 <view>蓝牙适配器开启状态：{{status?'成功':''}}</view>
 <view>蓝牙连接状态：{{createStatus?'成功':''}}</view>
