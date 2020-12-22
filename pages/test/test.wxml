@@ -1,0 +1,32 @@
+<view class="car">
+  <view class="info">
+    蓝牙连接状态：{{status===-1?'未连接':status===0?'连接失败':status===1?'连接中':status===2?'连接成功':''}}
+  </view>
+  <view class="car-bg" wx:if="{{showInfo}}" bindtap="hideInfo">
+    <view class="car-info">
+      <view class="info">车辆信息:</view>
+      <view class="car-wrapper" wx:if="{{carInfo.length>0}}">
+        <view class="car-box" wx:for="{{carInfo}}" wx:key="index">
+          {{item.name}}:{{item.status*1==0?'关闭':"开启"}}
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="btn-wrapper">
+    <view class="btn-box" bindtap="start">连接</view>
+    <view class="btn-box" bindtap="close">断开</view>
+    <view class="btn-box" bindtap="flash">纯闪灯</view>
+    <view class="btn-box" bindtap="flashAndHonking">闪灯鸣笛</view>
+    <view class="btn-box" bindtap="lock">上锁</view>
+    <view class="btn-box" bindtap="unlock">解锁</view>
+    <view class="btn-box" bindtap="roseWindow">一键升窗</view>
+    <view class="btn-box" bindtap="dropWindow">一键降窗</view>
+    <!-- <view class="btn-box" bindtap="openMainWindow">打开主驾驶车窗</view> -->
+    <!-- <view class="btn-box" bindtap="closeMainWindow">关闭主驾驶车窗</view> -->
+    <!-- <view class="btn-box" bindtap="openTopWindow">打开天窗</view> -->
+    <!-- <view class="btn-box" bindtap="closeTopWindow">关闭天窗</view> -->
+    <view class="btn-box" bindtap="trunkUnlock">后备箱开锁</view>
+    <view class="btn-box" bindtap="trunklock">后备箱关锁</view>
+    <view class="btn-box" bindtap="show">查询车辆信息</view>
+  </view>
+</view>
