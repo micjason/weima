@@ -3,8 +3,8 @@ import weima from "../../utils/vm.js";
 Page({
   data: {
     vm: null,
-    macId: "E2:79:5C:5D:93:37",
-    // macId:'F0:29:4E:C9:F1:77', //车上
+    // macId: "E2:79:5C:5D:93:37",
+    macId:'F0:29:4E:C9:F1:77', //车上
     key:'41ddf6dbd16c67fd34664cead63e04dd',
     passwd:'35c93f9609c9cd8fddef7f2b763ea481',
     status:-1,//-1 未连接,0 连接失败 1 连接中。。。 2 连接成功
@@ -50,13 +50,38 @@ Page({
   },
 
   close() {
-    this.data.vm.close();
+    console.log('this.data.status',this.data.status)
+    if(this.data.status!=2){
+      wx.showToast({
+        title: '蓝牙已断开',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+    this.data.vm.close().then(res=>{
+      console.log('close',res)
+      this.setData({
+        status:-1
+      })
+      wx.showToast({
+        title: res,
+        icon: 'none',
+        duration: 2000
+      })
+    })
   },
 
   handleCommand(res,str){
     if(res.status=='success' || res.status=='complete'){
       wx.showToast({
         title: str,
+        icon: 'none',
+        duration: 2000
+      })
+    }else if(res.status == 'fail'){
+      wx.showToast({
+        title: res.content,
         icon: 'none',
         duration: 2000
       })
@@ -73,13 +98,6 @@ Page({
     this.data.vm.flashAndHonking().then(res=>{
       console.log('闪灯鸣笛',res)
       this.handleCommand(res,'闪灯成功')
-      // if(res.status=='success' || res.status=='complete'){
-      //   wx.showToast({
-      //     title: '闪灯鸣笛',
-      //     icon: 'none',
-      //     duration: 2000
-      //   })
-      // }
     });
   },
 
@@ -87,13 +105,6 @@ Page({
     this.data.vm.lock().then(res=>{
       console.log('上锁',res)
       this.handleCommand(res,'上锁成功')
-      // if(res.status=='success'){
-      //   wx.showToast({
-      //     title: '上锁成功',
-      //     icon: 'none',
-      //     duration: 2000
-      //   })
-      // }
     });
   },
 
@@ -101,13 +112,6 @@ Page({
     this.data.vm.unlock().then(res=>{
       console.log('解锁',res)
       this.handleCommand(res,'解锁成功')
-      // if(res.status=='success'){
-      //   wx.showToast({
-      //     title: '解锁成功',
-      //     icon: 'none',
-      //     duration: 2000
-      //   })
-      // }
     });
   },
 
@@ -115,13 +119,6 @@ Page({
     this.data.vm.roseWindow().then(res=>{
       console.log('升窗',res)
       this.handleCommand(res,'升窗成功')
-      // if(res.status=='success'){
-      //   wx.showToast({
-      //     title: '升窗成功',
-      //     icon: 'none',
-      //     duration: 2000
-      //   })
-      // }
     });
   },
 
@@ -129,13 +126,6 @@ Page({
     this.data.vm.dropWindow().then(res=>{
       console.log('降窗',res)
       this.handleCommand(res,'降窗成功')
-      // if(res.status=='success'){
-      //   wx.showToast({
-      //     title: '降窗成功',
-      //     icon: 'none',
-      //     duration: 2000
-      //   })
-      // }
     });
   },
 
@@ -143,13 +133,6 @@ Page({
     this.data.vm.trunkUnlock().then(res=>{
       console.log('后备箱打开',res)
       this.handleCommand(res,'后备箱打开成功')
-      // if(res.status=='success'){
-      //   wx.showToast({
-      //     title: '后备箱打开成功',
-      //     icon: 'none',
-      //     duration: 2000
-      //   })
-      // }
     });
   },
 
@@ -157,13 +140,6 @@ Page({
     this.data.vm.trunklock().then(res=>{
       console.log('后备箱关闭',res)
       this.handleCommand(res,'后备箱关闭成功')
-      // if(res.status=='success'){
-      //   wx.showToast({
-      //     title: '后备箱关闭成功',
-      //     icon: 'none',
-      //     duration: 2000
-      //   })
-      // }
     });
   },
 

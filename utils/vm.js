@@ -803,6 +803,8 @@ mh.prototype.answer = async function (str) {
           tmp_index = i;
         }
       }
+      console.log('tmp_index',tmp_index,fail[tmp_index].name)
+      console.log('controlResolve',this.controlResolve)
       if (tmp_index !== "") {
         if (this.controlResolve) {
           this.controlResolve({
@@ -814,11 +816,6 @@ mh.prototype.answer = async function (str) {
     }
   } else if (str.substring(2, 4) == "61") {
     let code4 = str.substring(4, 6);
-    // let code_disconnect = hex_to_bin(str.substring(4, 6));
-    // let tmp_index = disconnect.indexOf(code_disconnect);
-    // if (tmp_index == -1) {
-    //   this.setStatus(-1, disconnect[tmp_index].name);
-    // }
 
     let tmp_index = "";
     for (let i = 0; i < disconnect.length; i++) {
@@ -876,62 +873,23 @@ mh.prototype.answer = async function (str) {
 
 //获取要连接的蓝牙设备
 mh.prototype.getBlue = function () {
+  let tmp_arr = this.macId.split(":")
+  let tmp_mac = tmp_arr.reverse().join("")
   return new Promise((resolve, reject) => {
     wx.getBluetoothDevices({
       success: (res) => {
-        console.log("获取搜索到的", res.devices);
-        let platform = "";
-        wx.getSystemInfo({
-          success(res) {
-            console.log("res.platform", res.platform);
-            platform = res.platform;
-          },
-        });
-        console.log("设备型号", platform);
         res.devices.forEach((item) => {
-          console.log("uuid:", item.advertisServiceUUIDs);
-          console.log("item.deviceId:", item.deviceId);
-          if (platform == "android") {
-            // 安卓的连接
-            if (item.deviceId == this.macId) {
-              console.log("androidandroidandroidandroid", item.deviceId);
+          if(item.advertisServiceUUIDs&&item.advertisServiceUUIDs.length>0){
+            if(item.advertisServiceUUIDs[0] == "6E400001-B5A3-F393-E0A9-" + tmp_mac){
+              console.log('找到了')
               this.did = item.deviceId;
               this.stopDiscovery();
-              this.connect();
+              this.connect()
               return;
-            }
-          } else {
-            // ios的连接
-            console.log("ios连接", item);
-            // console.log("advertisServiceUUIDs", item.advertisServiceUUIDs[0]);
-            let tmp_arr = this.macId.split(":")
-            console.log('uuid号码',tmp_arr.reverse().join(""))
-            console.log("this.macId", tmp_arr.reverse().join(""));
-            if (
-              item &&
-              item.advertisServiceUUIDs &&
-              item.advertisServiceUUIDs.length > 0
-            ) {
-              console.log('我滴神',item.advertisServiceUUIDs[0])
-              if(item.advertisServiceUUIDs[0] == "6E400001-B5A3-F393-E0A9-" + tmp_arr.reverse().join("")){
-                console.log('找到了')
-              }
-              // item.advertisServiceUUIDs.forEach((item, index) => {
-              //   if (
-              //     item ==
-              //     "6E400001-B5A3-F393-E0A9-" + this.macId.split(":").join("")
-              //   ) {
-              //     console.log("iosiosiosiosios", this.macId);
-              //     this.did = this.macId;
-              //     console.log("did", this.did);
-              //     // this.stopDiscovery();
-              //     // this.connect();
-              //     return;
-              //   }
-              // });
             }
           }
         });
+       
       },
     });
   });
@@ -1112,9 +1070,6 @@ mh.prototype.start = async function () {
   if (res == undefined) {
     return false;
   }
-
-  // this.did = this.macId; //这里有两种方式连接，一种直接赋值给did，一种通过搜寻蓝牙比对deviceid或者蓝牙名称进行连接
-
   await this.wait(500);
 
   if (this.did) {
@@ -1130,7 +1085,7 @@ mh.prototype.start = async function () {
 };
 
 mh.prototype.close = function () {
-  // this.stopDiscovery();
+  this.stopDiscovery();
   this.commandType = 998;
   if (this.did) {
     wx.closeBLEConnection({
@@ -1145,18 +1100,6 @@ mh.prototype.close = function () {
       console.log("关闭蓝牙适配器success", res);
     },
   });
-
-  wx.offBLEConnectionStateChange({
-    success(res) {
-      console.log("关闭蓝牙适配器连接监听", res);
-    },
-  })
-
-  wx.offBluetoothAdapterStateChange({
-    success(res) {
-      console.log("关闭蓝牙适配器开关监听", res);
-    },
-  })
 };
 
 export default mh;
