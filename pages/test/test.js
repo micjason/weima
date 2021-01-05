@@ -1,180 +1,264 @@
-import weima from "../../utils/vm.js";
+import weima from "../../utils/new/vm.min.js";
 
 Page({
   data: {
     vm: null,
     // macId: "E2:79:5C:5D:93:37",
-    macId:'F0:29:4E:C9:F1:77', //车上
-    key:'41ddf6dbd16c67fd34664cead63e04dd',
-    passwd:'35c93f9609c9cd8fddef7f2b763ea481',
-    status:-1,//-1 未连接,0 连接失败 1 连接中。。。 2 连接成功
-    msg:'',
-    carInfo:[]
+    // macId:'F0:29:4E:C9:F1:77', //车上
+    // macId:'77F1C94E29F0',
+    // key:'e884c14cdde82c2f1828d7fc7670980b',
+    // passwd:'a20a71b4e27beca154cb62e831c15b1d',
+    // macId: "DA9BC3E719CF",
+    // key: "87a79e583ac8636eed3415368774652b",
+    // passwd: "f07f95ae1aa1a7b0d8a9a2f30ce5cf2b",
+    // macId: "A47C660F17DE",
+    // key: "c9155909fd81eb6a3b23ffedc96c5832",
+    // passwd: "91e443e598ff0964b57aa8bf7965f5e9",
+    macId: "",
+    key: "",
+    passwd: "",
+
+    // 薛总145437
+    // macId: "E653B4F50DCB",
+    // key: "02635c276de714909374c7417769f49e",
+    // passwd: "9a576f5be10bf74a6e2bedc519eb3dd5",
+
+    // 薛总145306
+    // macId: "0CF84D62C6FB",
+    // key: "556bc12342cf9799f2d8189fa0a923f5",
+    // passwd: "bc41e9838d135be31a8cdb405512e4a9",
+
+    // 薛总145392
+    // macId: "D06181FECACF",
+    // key: "48c71f96c935a8b2c34619a961fdc763",
+    // passwd: "c08a72b36a11c8b6b7b9edf6f98f0209",
+
+    // 薛总145348
+    // macId: "CC79DEDE54EF",
+    // key: "6362ee6ba1e70ad4232ff59d55c268b1",
+    // passwd: "4a38fffabd0949f050905ab9f107dfb4",
+
+    status: -1, //-1 未连接,0 连接失败 1 连接中。。。 2 连接成功
+    msg: "",
+    carInfo: [],
+    showInfo: false,
   },
 
-  hideInfo(){
+  bindMacId: function (e) {
     this.setData({
-      showInfo:false
-    })
+      macId: e.detail.value,
+    });
   },
-
-  show(){
+  bindKey: function (e) {
     this.setData({
-      showInfo:true
-    })
-    this.check()
+      key: e.detail.value,
+    });
   },
-
-  callBack(str,msg) {
+  bindPass: function (e) {
     this.setData({
-      status:str,
-      msg,
-      showInfo:false
-    })
-    if(Object.prototype.toString.call(msg)==='[object String]'){
-      wx.showToast({
-        title: msg,
-        icon: 'none',
-        duration: 2000
-      })
+      passwd: e.detail.value,
+    });
+  },
+  hideInfo(e) {
+    this.setData({
+      showInfo: false,
+    });
+  },
+  check() {
+    var result = this.checkStatus();
+    if (!result) {
+      return false;
     }
-    else{
-      this.setData({
-        carInfo:msg
-      })
-    }
-  },
-
-  start() {
-    this.data.vm.start();
-  },
-
-  close() {
-    console.log('this.data.status',this.data.status)
-    if(this.data.status!=2){
-      wx.showToast({
-        title: '蓝牙已断开',
-        icon: 'none',
-        duration: 2000
-      })
-      return
-    }
-    this.data.vm.close().then(res=>{
-      console.log('close',res)
-      this.setData({
-        status:-1
-      })
-      wx.showToast({
-        title: res,
-        icon: 'none',
-        duration: 2000
-      })
-    })
-  },
-
-  handleCommand(res,str){
-    if(res.status=='success' || res.status=='complete'){
-      wx.showToast({
-        title: str,
-        icon: 'none',
-        duration: 2000
-      })
-    }else if(res.status == 'fail'){
-      wx.showToast({
-        title: res.content,
-        icon: 'none',
-        duration: 2000
-      })
-    }
-  },
-
-  flash() {
-    this.data.vm.flash().then(res=>{
-      this.handleCommand(res,'闪灯成功')
+    this.setData({
+      showInfo: true,
     });
-  },
-
-  flashAndHonking() {
-    this.data.vm.flashAndHonking().then(res=>{
-      console.log('闪灯鸣笛',res)
-      this.handleCommand(res,'闪灯成功')
-    });
-  },
-
-  lock() {
-    this.data.vm.lock().then(res=>{
-      console.log('上锁',res)
-      this.handleCommand(res,'上锁成功')
-    });
-  },
-
-  unlock() {
-    this.data.vm.unlock().then(res=>{
-      console.log('解锁',res)
-      this.handleCommand(res,'解锁成功')
-    });
-  },
-
-  roseWindow() {
-    this.data.vm.roseWindow().then(res=>{
-      console.log('升窗',res)
-      this.handleCommand(res,'升窗成功')
-    });
-  },
-
-  dropWindow() {
-    this.data.vm.dropWindow().then(res=>{
-      console.log('降窗',res)
-      this.handleCommand(res,'降窗成功')
-    });
-  },
-
-  trunkUnlock() {
-    this.data.vm.trunkUnlock().then(res=>{
-      console.log('后备箱打开',res)
-      this.handleCommand(res,'后备箱打开成功')
-    });
-  },
-
-  trunklock() {
-    this.data.vm.trunklock().then(res=>{
-      console.log('后备箱关闭',res)
-      this.handleCommand(res,'后备箱关闭成功')
-    });
-  },
-
-  openMainWindow() {
-    this.data.vm.openMainWindow();
-  },
-
-  closeMainWindow() {
-    this.data.vm.closeMainWindow();
-  },
-
-  openTopWindow() {
-    this.data.vm.openTopWindow();
-  },
-
-  closeTopWindow() {
-    this.data.vm.closeTopWindow().then(res=>{
-      console.log('closeTopWindow',res)
-    });
-  },
-
-  check(){
-    this.data.vm.check().then(res=>{
-      console.log('检查',res)
-      if(res.status=='info'){
+    this.data.vm.check().then((res) => {
+      if (res.status == "info") {
         this.setData({
-          carInfo:res.content
-        })
+          carInfo: res.content,
+        });
       }
     });
   },
 
-  onShow: function () {
+  callBack(str, msg) {
     this.setData({
-      vm: new weima(this.data.macId, this.data.key,this.data.passwd, this.callBack),
+      status: str,
+      msg,
     });
+    wx.showToast({
+      title: msg,
+      icon: "none",
+      duration: 2000,
+    });
+  },
+
+  start() {
+    if (this.data.macId == "") {
+      wx.showToast({
+        title: "请输入macId",
+        icon: "none",
+        duration: 2000,
+      });
+      return false;
+    }
+    if (this.data.key == "") {
+      wx.showToast({
+        title: "请输入key",
+        icon: "none",
+        duration: 2000,
+      });
+      return false;
+    }
+    if (this.data.passwd == "") {
+      wx.showToast({
+        title: "请输入passwd",
+        icon: "none",
+        duration: 2000,
+      });
+      return false;
+    }
+
+    if (this.data.status === 1) {
+      wx.showToast({
+        title: "连接中",
+        icon: "none",
+        duration: 2000,
+      });
+      return false;
+    }
+    if (this.data.status === 2) {
+      wx.showToast({
+        title: "已连接",
+        icon: "none",
+        duration: 2000,
+      });
+      return false;
+    }
+
+    this.setData({
+      vm: new weima(
+        this.data.macId,
+        this.data.key,
+        this.data.passwd,
+        this.callBack
+      ),
+    });
+    this.data.vm.start();
+  },
+  close() {
+    if (this.data.status != 2) {
+      wx.showToast({
+        title: "蓝牙已断开",
+        icon: "none",
+        duration: 2000,
+      });
+    }
+    this.setData({
+      status: -1,
+    });
+    if (this.data.vm) {
+      this.data.vm.close();
+    }
+  },
+
+  doCommand(e) {
+    var result = this.checkStatus()
+    if(!result){
+      return false
+    }
+    const that  = this
+    var command = e.target.dataset.type;
+    var name = e.target.dataset.name;
+    console.log("command", command);
+    switch (command) {
+      case "flash":
+        this.data.vm.flash().then((res) => {
+          console.log("res", res);
+          that.handleCommand(res, name);
+        });
+        break;
+      case "flashAndHonking":
+        this.data.vm.flashAndHonking().then((res) => {
+          console.log("res", res);
+          that.handleCommand(res, name);
+        });
+        break;
+      case "lock":
+        this.data.vm.lock().then((res) => {
+          that.handleCommand(res, name);
+        });
+        break;
+      case "unlock":
+        this.data.vm.unlock().then((res) => {
+          that.handleCommand(res, name);
+        });
+        break;
+      case "roseWindow":
+        this.data.vm.roseWindow().then((res) => {
+          that.handleCommand(res, name);
+        });
+        break;
+      case "dropWindow":
+        this.data.vm.dropWindow().then((res) => {
+          that.handleCommand(res, name);
+        });
+        break;
+      case "trunkUnlock":
+        this.data.vm.trunkUnlock().then((res) => {
+          that.handleCommand(res, name);
+        });
+        break;
+      case "trunklock":
+        this.data.vm.trunklock().then((res) => {
+          that.handleCommand(res, name);
+        });
+        break;
+    }
+  },
+
+  checkStatus() {
+    var result = true;
+    if (this.data.status === 1) {
+      wx.showToast({
+        title: "连接中，请稍后",
+        icon: "none",
+        duration: 2000,
+      });
+      result = false;
+    }
+    if (this.data.status === -1) {
+      wx.showToast({
+        title: "蓝牙未连接",
+        icon: "none",
+        duration: 2000,
+      });
+      result = false;
+    }
+    if (this.data.status === 0) {
+      wx.showToast({
+        title: "蓝牙连接失败",
+        icon: "none",
+        duration: 2000,
+      });
+      result = false;
+    }
+    return result;
+  },
+
+  handleCommand(res, str) {
+    if (res.status == "success" || res.status == "complete") {
+      wx.showToast({
+        title: str,
+        icon: "none",
+        duration: 2000,
+      });
+    } else if (res.status == "fail") {
+      wx.showToast({
+        title: res.content,
+        icon: "none",
+        duration: 2000,
+      });
+    }
   },
 });

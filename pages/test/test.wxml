@@ -13,20 +13,29 @@
     </view>
   </view>
   <view class="btn-wrapper">
-    <view class="btn-box" bindtap="start">连接</view>
-    <view class="btn-box" bindtap="close">断开</view>
-    <view class="btn-box" bindtap="flash">纯闪灯</view>
-    <view class="btn-box" bindtap="flashAndHonking">闪灯鸣笛</view>
-    <view class="btn-box" bindtap="lock">上锁</view>
-    <view class="btn-box" bindtap="unlock">解锁</view>
-    <view class="btn-box" bindtap="roseWindow">一键升窗</view>
-    <view class="btn-box" bindtap="dropWindow">一键降窗</view>
-    <!-- <view class="btn-box" bindtap="openMainWindow">打开主驾驶车窗</view> -->
-    <!-- <view class="btn-box" bindtap="closeMainWindow">关闭主驾驶车窗</view> -->
-    <!-- <view class="btn-box" bindtap="openTopWindow">打开天窗</view> -->
-    <!-- <view class="btn-box" bindtap="closeTopWindow">关闭天窗</view> -->
-    <view class="btn-box" bindtap="trunkUnlock">后备箱开锁</view>
-    <view class="btn-box" bindtap="trunklock">后备箱关锁</view>
-    <view class="btn-box" bindtap="show">查询车辆信息</view>
+    <view class="btn-input">
+      <text>MacId:</text>
+      <input type="text" bindinput="bindMacId" />
+    </view>
+    <view class="btn-input">
+      <text>key:</text>
+      <input type="text" bindinput="bindKey" />
+    </view>
+    <view class="btn-input">
+      <text>passwd:</text>
+      <input type="text" bindinput="bindPass" />
+    </view>
+
+    <view class="btn-box" hover-class="btn-box-hover" bindtap="start">连接</view>
+    <view class="btn-box" hover-class="btn-box-hover" bindtap="close">断开</view>
+    <view class="btn-box" hover-class="btn-box-hover" bindtap="doCommand" data-type="flash" data-name="闪灯成功">纯闪灯</view>
+    <view class="btn-box" hover-class="btn-box-hover" bindtap="doCommand" data-type="flashAndHonking" data-name="闪灯成功">闪灯鸣笛</view>
+    <view class="btn-box" hover-class="btn-box-hover" bindtap="doCommand" data-type="lock" data-name="上锁成功">上锁</view>
+    <view class="btn-box" hover-class="btn-box-hover" bindtap="doCommand" data-type="unlock" data-name="解锁成功">解锁</view>
+    <view class="btn-box" hover-class="btn-box-hover" bindtap="doCommand" data-type="roseWindow" data-name="一键升窗成功">一键升窗</view>
+    <view class="btn-box" hover-class="btn-box-hover" bindtap="doCommand" data-type="dropWindow" data-name="一键降窗成功">一键降窗</view>
+    <view class="btn-box" hover-class="btn-box-hover" bindtap="doCommand" data-type="trunkUnlock" data-name="后备箱开锁成功">后备箱开锁</view>
+    <view class="btn-box" hover-class="btn-box-hover" bindtap="doCommand" data-type="trunklock" data-name="后备箱关锁成功">后备箱关锁</view>
+    <view class="btn-box" hover-class="btn-box-hover" bindtap="check">查询车辆信息</view>
   </view>
 </view>
