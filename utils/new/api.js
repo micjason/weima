@@ -81,39 +81,39 @@ let fail = [{
     status: "06",
   },
   {
-    name: "失败，BCM执行车控失败",
+    name: "失败，BCM执行车控失败,错误指令",
     status: "07",
   },
   {
-    name: "失败，车上有人",
+    name: "失败，BCM执行车控失败,车辆正在运行",
     status: "08",
   },
   {
-    name: "失败，车速不为0",
+    name: "失败，BCM执行车控失败,车门开着",
     status: "09",
   },
   {
-    name: "失败，电源不在OFF档",
+    name: "失败，BCM执行车控失败,通讯错误",
     status: "0a",
   },
   {
-    name: "失败，档位不在P档",
+    name: "失败，BCM执行车控失败,车内刹车被踩下",
     status: "0b",
   },
   {
-    name: "失败，车内启动开关被按下",
+    name: "失败，BCM执行车控失败,车辆未处于设防状态",
     status: "0c",
   },
   {
-    name: "失败，车辆未熄火",
+    name: "失败，BCM执行车控失败,电源未下电",
     status: "0d",
   },
   {
-    name: "失败，车辆未上锁",
+    name: "失败，BCM执行车控失败,鉴权失败",
     status: "0e",
   },
   {
-    name: "失败，钥匙在车内",
+    name: "失败，BCM执行车控失败,收到重复的命令",
     status: "0f",
   },
   {
@@ -121,7 +121,7 @@ let fail = [{
     status: "10",
   },
   {
-    name: "失败，发动机启动加车上有人",
+    name: "失败，发动机启动",
     status: "11",
   },
   {
