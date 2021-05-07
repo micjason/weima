@@ -6,7 +6,7 @@ const {
   fail,
   disconnect
 } = require("./api.min");
-// console.log('door', door)
+console.log('door', door)
 
 function ab2hex(buffer) {
   var hexArr = Array.prototype.map.call(new Uint8Array(buffer), function (bit) {
@@ -33,7 +33,7 @@ function hexCharCodeToStr(hexCharCodeStr) {
     trimedStr;
   var len = rawStr.length;
   if (len % 2 !== 0) {
-    // console.log("Illegal Format ASCII Code!");
+    console.log("Illegal Format ASCII Code!");
     return "";
   }
   var curCharCode;
@@ -156,10 +156,10 @@ function getKey(str) {
       result.push(item);
     }
   });
-  // console.log("getKey", key.toString());
+  console.log("getKey", key.toString());
 
   result = result.join("");
-  // console.log("key", result);
+  console.log("key", result);
   return result;
 }
 
@@ -175,7 +175,7 @@ function getpasswd(str) {
   );
   let key_str = key.toString();
 
-  // console.log("key_str", key_str);
+  console.log("key_str", key_str);
 
   let code1 = "0x" + key_str.substring(0, 2);
   let code2 = "0x" + key_str.substring(2, 4);
@@ -198,7 +198,7 @@ function getpasswd(str) {
   dataView.setUint8(11, 0);
   dataView.setUint8(12, 0);
   dataView.setUint8(13, 0);
-  // console.log("bkid", ab2hex(buffer));
+  console.log("bkid", ab2hex(buffer));
   return buffer;
 }
 
@@ -354,16 +354,16 @@ mh.prototype.read = async function () {
       serviceId: this.sid,
       characteristicId: this.nid,
       success: (res) => {
-        // console.log("读取值成功");
+        console.log("读取值成功");
         resolve(res);
       },
       fail: (e) => {
-        // console.log("读取值失败");
+        console.log("读取值失败");
         reject(e);
       },
       complete: (e) => {
-        // console.log("readBLECharacteristicValue:", e);
-        // console.log("读取值完毕");
+        console.log("readBLECharacteristicValue:", e);
+        console.log("读取值完毕");
       },
     });
   });
@@ -376,9 +376,9 @@ mh.prototype.write = function (value) {
   }
   this.isWriting = true;
   let str = hex16tostr(value);
-  // console.log("strsss", str);
+  console.log("strsss", str);
   var pwdstr = this.encrypt(str).ciphertext.toString(); //加密后密文
-  // console.log("pwdstr", pwdstr);
+  console.log("pwdstr", pwdstr);
   let str2 = strToHexCharCode(pwdstr);
 
   let strarr = str2.split(" ");
@@ -390,8 +390,8 @@ mh.prototype.write = function (value) {
     dataView.setUint8(i, strarr[i].toString(16));
     writeDatas += dataView.getUint8(i).toString(16) + " ";
   }
-  // console.log("dataView", dataView, "writeDatas", writeDatas);
-  // console.log("str2", str2);
+  console.log("dataView", dataView, "writeDatas", writeDatas);
+  console.log("str2", str2);
 
   if (this.status !== 2) {
     return false;
@@ -424,11 +424,11 @@ mh.prototype.openBlue = function () {
   return new Promise((resolve, reject) => {
     wx.openBluetoothAdapter({
       success: (res) => {
-        // console.log("开启蓝牙适配器success", res);
+        console.log("开启蓝牙适配器success", res);
         resolve(res);
       },
       fail: (e) => {
-        // console.log("打开蓝牙失败");
+        console.log("打开蓝牙失败");
         this.setStatus(0, "请先打开蓝牙,并允许微信使用蓝牙");
         reject(e);
       },
@@ -442,7 +442,7 @@ mh.prototype.startDiscovery = function () {
   return new Promise((resovle, reject) => {
     wx.startBluetoothDevicesDiscovery({
       success: (res) => {
-        // console.log("开启蓝牙搜寻功能.....");
+        console.log("开启蓝牙搜寻功能.....");
         resovle();
       },
       fail: (e) => {
@@ -457,13 +457,13 @@ mh.prototype.startDiscovery = function () {
 mh.prototype.stopDiscovery = function () {
   wx.stopBluetoothDevicesDiscovery({
     success(res) {
-      // console.log("关闭蓝牙搜寻功能", res);
+      console.log("关闭蓝牙搜寻功能", res);
     },
   });
 
   wx.offBluetoothDeviceFound({
     success(res) {
-      // console.log("取消监听寻找到新设备", res);
+      console.log("取消监听寻找到新设备", res);
     },
   });
 };
@@ -473,10 +473,10 @@ mh.prototype.answer = async function (str) {
   this.codeOld = this.codeNew;
   this.codeNew = str.substring(2, 4);
 
-  // console.log("执行value变化后的回调", str);
+  console.log("执行value变化后的回调", str);
   if (this.codeOld == "24" && this.codeNew == "51") {
     let code_door = hex_to_bin(str.substring(6, 8)).split("");
-    // console.log("code_door", code_door);
+    console.log("code_door", code_door);
     // 1开锁 2关锁 3升窗 4降窗 5闪灯 6闪灯鸣笛 7后备箱开锁 8后备箱关锁 9检查车辆信息 998关闭蓝牙 999连接蓝牙
     if (this.commandType === 1) {
       if (code_door[0] == 1) {
@@ -517,7 +517,7 @@ mh.prototype.answer = async function (str) {
     if (this.commandType === 3) {
       //升窗
       let code_window = str.substring(8, 10);
-      // console.log("code_window", code_window, hex_to_bin(str.substring(8, 10)));
+      console.log("code_window", code_window, hex_to_bin(str.substring(8, 10)));
       if (code_window == "00") {
         if (this.controlResolve) {
           this.controlResolve({
@@ -591,7 +591,7 @@ mh.prototype.answer = async function (str) {
     }
   } else if (this.codeNew == "24") {
     let code3 = str.substring(4, 6);
-    // console.log("code3", code3);
+    console.log("code3", code3);
     if (code3 == "00") {
       if (this.controlResolve) {
         this.controlResolve({
@@ -606,8 +606,8 @@ mh.prototype.answer = async function (str) {
           tmp_index = i;
         }
       }
-      // console.log("tmp_index", tmp_index, fail[tmp_index].name);
-      // console.log("controlResolve", this.controlResolve);
+      console.log("tmp_index", tmp_index, fail[tmp_index].name);
+      console.log("controlResolve", this.controlResolve);
       if (tmp_index !== "") {
         if (this.controlResolve) {
           this.controlResolve({
@@ -626,7 +626,7 @@ mh.prototype.answer = async function (str) {
         tmp_index = i;
       }
     }
-    // console.log("disconnect[tmp_index].name", disconnect[tmp_index].name);
+    console.log("disconnect[tmp_index].name", disconnect[tmp_index].name);
     if (tmp_index !== "") {
       this.setStatus(0, disconnect[tmp_index].name);
     }
@@ -639,25 +639,25 @@ mh.prototype.answer = async function (str) {
     if (code_window[0] == 0 && code_window[1] == 0) {
       windowInfo[0].status = 0;
     }
-    if (code_window[0] == 1 && code_window[1] == 0) {
+    else {
       windowInfo[0].status = 1;
     }
     if (code_window[2] == 0 && code_window[3] == 0) {
       windowInfo[1].status = 0;
     }
-    if (code_window[2] == 1 && code_window[3] == 0) {
+    else {
       windowInfo[1].status = 1;
     }
     if (code_window[4] == 0 && code_window[5] == 0) {
       windowInfo[2].status = 0;
     }
-    if (code_window[4] == 1 && code_window[5] == 0) {
+    else {
       windowInfo[2].status = 1;
     }
     if (code_window[6] == 0 && code_window[7] == 0) {
       windowInfo[3].status = 0;
     }
-    if (code_window[6] == 1 && code_window[7] == 0) {
+    else {
       windowInfo[3].status = 1;
     }
 
@@ -699,7 +699,7 @@ mh.prototype.answer = async function (str) {
     
     let result = dh.concat(tmp_engine)
 
-    // console.log("result", result);
+    console.log("result", result);
     if (this.controlResolve) {
       this.controlResolve({
         status: "info",
@@ -738,7 +738,7 @@ mh.prototype.getBlue = function () {
   return new Promise((resolve, reject) => {
     wx.getBluetoothDevices({
       success: (res) => {
-        // console.log('找到的设备：', res)
+        console.log('找到的设备：', res)
         res.devices.forEach((item) => {
           if (
             item.advertisServiceUUIDs &&
@@ -748,7 +748,7 @@ mh.prototype.getBlue = function () {
               item.advertisServiceUUIDs[0] ==
               "6E400001-B5A3-F393-E0A9-" + tmp_arr
             ) {
-              // console.log("找到了", item.advertisServiceUUIDs[0]);
+              console.log("找到了", item.advertisServiceUUIDs[0]);
               this.did = item.deviceId;
               this.stopDiscovery();
               this.connect();
@@ -763,7 +763,7 @@ mh.prototype.getBlue = function () {
 
 // 执行连接操作
 mh.prototype.connect = function () {
-  // console.log("执行连接操作");
+  console.log("执行连接操作");
   return new Promise(async (resolve, reject) => {
     var res2 = await this.create();
     var res3 = await this.getService();
@@ -782,7 +782,7 @@ mh.prototype.notify = function () {
       serviceId: this.sid,
       characteristicId: this.nid,
       success: (res) => {
-        // console.log("notify success", res);
+        console.log("notify success", res);
         resolve();
       },
       fail: (e) => {
@@ -801,7 +801,7 @@ mh.prototype.create = function () {
     wx.createBLEConnection({
       deviceId: this.did,
       success: (res) => {
-        // console.log("createBLEConnection成功");
+        console.log("createBLEConnection成功");
         resolve(res);
       },
       fail: (e) => {
@@ -819,7 +819,7 @@ mh.prototype.getService = function () {
     wx.getBLEDeviceServices({
       deviceId: this.did,
       success: (res) => {
-        // console.log("getService成功...", res);
+        console.log("getService成功...", res);
         for (let i = 0; i < res.services.length; i++) {
           if (res.services[i].isPrimary) {
             this.sid = res.services[i].uuid;
@@ -829,7 +829,7 @@ mh.prototype.getService = function () {
         }
       },
       fail: (e) => {
-        // console.log("getService失败...", res);
+        console.log("getService失败...", res);
         this.setStatus(0, "连接失败，请在车辆附近重试");
       },
       complete: (e) => {},
@@ -843,9 +843,9 @@ mh.prototype.getCharacter = function () {
     deviceId: this.did,
     serviceId: this.sid,
     success: (res) => {
-      // console.log("getBLEDeviceCharacteristics success", res.characteristics);
-      // console.log("this.passwd", this.passwd.toString());
-      // console.log("this.key", this.key);
+      console.log("getBLEDeviceCharacteristics success", res.characteristics);
+      console.log("this.passwd", this.passwd.toString());
+      console.log("this.key", this.key);
       for (let i = 0; i < res.characteristics.length; i++) {
         let item = res.characteristics[i];
         if (item.properties.write) {
@@ -870,28 +870,28 @@ mh.prototype.getCharacter = function () {
         characteristicId: this.cid,
         value: this.passwd,
         complete: (res) => {
-          // console.log("write", res);
+          console.log("write", res);
         },
       });
     },
     fail(res) {
-      // console.error("getBLEDeviceCharacteristics", res);
+      // wx.error("getBLEDeviceCharacteristics", res);
     },
   });
   // 操作之前先监听，保证第一时间获取数据
-  // console.log("开启特征值变化监听");
+  console.log("开启特征值变化监听");
   wx.onBLECharacteristicValueChange((res) => {
-    // console.log("changed", res);
-    // console.log(
-    //   `characteristic ${res.characteristicId} has changed, now is ${res.value}`
-    // );
-    // console.log(ab2hex(res.value));
+    console.log("changed", res);
+    console.log(
+      `characteristic ${res.characteristicId} has changed, now is ${res.value}`
+    );
+    console.log(ab2hex(res.value));
 
     if (res.value) {
       var encryptedHexStr = CryptoJS.enc.Hex.parse(ab2hex(res.value)); //密文转16进制
       var encryptedBase64Str = CryptoJS.enc.Base64.stringify(encryptedHexStr);
 
-      // console.log("解密后的值：", this.decrypt(encryptedBase64Str));
+      console.log("解密后的值：", this.decrypt(encryptedBase64Str));
       this.answer(this.decrypt(encryptedBase64Str));
     }
   });
@@ -903,7 +903,7 @@ mh.prototype.start = async function () {
   this.commandType = 999;
 
   wx.onBluetoothAdapterStateChange((res) => {
-    // console.log("监听适配器变化", res);
+    console.log("监听适配器变化", res);
     if (!res.available) {
       this.setStatus(0, "连接已断开");
     }
@@ -916,7 +916,7 @@ mh.prototype.start = async function () {
     if (res.connected) {
       this.setStatus(2, "连接成功");
     }
-    // console.log("监听连接状态变化", res.connected, this.status);
+    console.log("监听连接状态变化", res.connected, this.status);
   });
 
   var res = await this.openBlue().catch(() => {
@@ -927,12 +927,12 @@ mh.prototype.start = async function () {
     return false;
   }
   await this.wait(500);
-  // console.log('this.did', this.did)
+  console.log('this.did', this.did)
   if (this.did) {
     await this.connect();
   } else {
     wx.onBluetoothDeviceFound(async (res) => {
-      // console.log("检测倒新设备....", res);
+      console.log("检测倒新设备....", res);
       await this.getBlue();
     });
 
@@ -947,13 +947,13 @@ mh.prototype.close = function () {
     wx.closeBLEConnection({
       deviceId: this.did,
       success(res) {
-        // console.log("关闭蓝牙连接success", res);
+        console.log("关闭蓝牙连接success", res);
       },
     });
   }
   wx.closeBluetoothAdapter({
     success(res) {
-      // console.log("关闭蓝牙适配器success", res);
+      console.log("关闭蓝牙适配器success", res);
     },
   });
 };

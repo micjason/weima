@@ -1,42 +1,11 @@
-import weima from "../../utils/new/vm.min.js";
+import weima from "../../utils/new/vm";
 
 Page({
   data: {
     vm: null,
-    // macId: "E2:79:5C:5D:93:37",
-    // macId:'F0:29:4E:C9:F1:77', //车上
-    // macId:'77F1C94E29F0',
-    // key:'e884c14cdde82c2f1828d7fc7670980b',
-    // passwd:'a20a71b4e27beca154cb62e831c15b1d',
-    // macId: "DA9BC3E719CF",
-    // key: "87a79e583ac8636eed3415368774652b",
-    // passwd: "f07f95ae1aa1a7b0d8a9a2f30ce5cf2b",
-    // macId: "A47C660F17DE",
-    // key: "c9155909fd81eb6a3b23ffedc96c5832",
-    // passwd: "91e443e598ff0964b57aa8bf7965f5e9",
     macId: "",
     key: "",
     passwd: "",
-
-    // 薛总145437
-    // macId: "E653B4F50DCB",
-    // key: "02635c276de714909374c7417769f49e",
-    // passwd: "9a576f5be10bf74a6e2bedc519eb3dd5",
-
-    // 薛总145306
-    // macId: "0CF84D62C6FB",
-    // key: "556bc12342cf9799f2d8189fa0a923f5",
-    // passwd: "bc41e9838d135be31a8cdb405512e4a9",
-
-    // 薛总145392
-    // macId: "D06181FECACF",
-    // key: "48c71f96c935a8b2c34619a961fdc763",
-    // passwd: "c08a72b36a11c8b6b7b9edf6f98f0209",
-
-    // 薛总145348
-    // macId: "CC79DEDE54EF",
-    // key: "6362ee6ba1e70ad4232ff59d55c268b1",
-    // passwd: "4a38fffabd0949f050905ab9f107dfb4",
 
     status: -1, //-1 未连接,0 连接失败 1 连接中。。。 2 连接成功
     msg: "",
